@@ -112,6 +112,6 @@ form='au'
 SpectDir=os.getcwd() + "\spectrogram"
 StftDir=os.getcwd() + "\stft"
 #Change2Wav(directory,form,home)
-#Conversion2Spectrogram(directory,SpectDir,home)
+Conversion2Spectrogram(directory,SpectDir,home)
 Conversion2STFT(directory,StftDir,home)
 
