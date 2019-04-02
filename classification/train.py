@@ -11,7 +11,7 @@ from keras.optimizers import Adam
 import numpy as np
 import sys
 import os
-#tf.enable_eager_execution()
+tf.enable_eager_execution()
 #sess = tf.Session()
 #sess.run(tf.global_variables_initializer())
 
@@ -31,9 +31,9 @@ def parser(record):
 
 def input_fn(filenames):
   dataset = tf.data.TFRecordDataset(filenames=filenames, num_parallel_reads=40)
-  dataset = dataset.apply(
-      tf.contrib.data.shuffle_and_repeat(1024, 1)
-  )
+  #dataset = dataset.apply(
+  #    tf.contrib.data.shuffle_and_repeat(1024, 1)
+  #)
   dataset = dataset.apply(
       tf.contrib.data.map_and_batch(parser, 32)
   )
@@ -44,17 +44,17 @@ def input_fn(filenames):
 
 
 def train_input_fn():
-    return input_fn(filenames=["train.tfrecords"])
+    return input_fn(filenames=["train.tfrecords","test.tfrecords"])
 
-def test_input_fn():
-    return input_fn(filenames=["test.tfrecords"])
+#def test_input_fn():
+#    return input_fn(filenames=["test.tfrecords"])
 
 def val_input_fn():
     return input_fn(filenames=["val.tfrecords"])
 
 # Load mydataset
-(X_train, y_train) = train_input_fn()
-(X_test, y_test) = test_input_fn()
+(X_train, y_train), (X_test, y_test) = train_input_fn()
+#(X_test, y_test) = test_input_fn()
 
 # convert brightness values from bytes to floats between 0 and 1:
 X_train = X_train.astype('float32')
