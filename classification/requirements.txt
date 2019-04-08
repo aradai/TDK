@@ -1,0 +1,16 @@
+used packages:
+tensorflow - has to download
+keras - has to download
+numpy
+os
+sys
+tqdm - optional, it looks good
+random
+cv2 - has to download (opencv-python)
+
+used programs:
+sox - planning to change pydub, has to download
+
+planned packages:
+librosa - has to download
+pydub - has to download
