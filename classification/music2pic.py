@@ -11,7 +11,8 @@ from scipy.io import wavfile
 import glob
 import matplotlib.pyplot as plt
 import numpy as np
-
+from pydub import AudioSegment
+from pydub.utils import make_chunks
 
 # In[2]:
 
@@ -41,6 +42,35 @@ def Change2Wav(directory,form,home):
         os.chdir(home)
         
     print("Finished conversion from " + form + " to wav.")
+
+
+def Slices(directory,home):
+    #os.chdir(directory)
+    print("Starting slicing.")
+    for direct in os.listdir(directory):
+        for music in os.listdir("{0}\{1}".format(directory,direct)):
+            #process wav file
+            name = music[:-4]
+            os.chdir("{0}\{1}".format(directory,direct))
+
+            myaudio = AudioSegment.from_file(music , "wav") 
+            chunk_length_ms = 1000 # pydub calculates in millisec
+            chunks = make_chunks(myaudio, chunk_length_ms) #Make chunks of one sec
+
+            for i, chunk in enumerate(chunks):
+                if i < 10:
+                    chunk_name = name + ".0{0}.wav".format(i)
+                else:
+                    chunk_name = name + ".{0}.wav".format(i)
+
+                print("exporting {0}".format(chunk_name))
+                chunk.export(chunk_name, format="wav")
+            os.system('del {0}'.format(music))
+
+        
+            os.chdir(home)
+    
+    print("Finished slicing.")
 
 
 # In[4]:
@@ -111,7 +141,8 @@ directory=os.getcwd() + "\genres"
 form='au'
 SpectDir=os.getcwd() + "\spectrogram"
 StftDir=os.getcwd() + "\stft"
-#Change2Wav(directory,form,home)
-Conversion2Spectrogram(directory,SpectDir,home)
+Change2Wav(directory,form,home)
+Slices(directory,home)
+#Conversion2Spectrogram(directory,SpectDir,home)
 Conversion2STFT(directory,StftDir,home)
 
